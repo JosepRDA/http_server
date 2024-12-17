@@ -2,7 +2,6 @@
 SRC_DIR_SERVER := src/server
 SRC_DIR_CLIENT := src/client
 
-# Output directory for object files and executables
 BIN_DIR := bin
 
 # Server and client source files
@@ -13,15 +12,12 @@ CLIENT_SRC := $(wildcard $(SRC_DIR_CLIENT)/*.c)
 SERVER_OBJ := $(SERVER_SRC:$(SRC_DIR_SERVER)/%.c=$(BIN_DIR)/%.o)
 CLIENT_OBJ := $(CLIENT_SRC:$(SRC_DIR_CLIENT)/%.c=$(BIN_DIR)/%.o)
 
-# Output target executables
 TARGET1 := $(BIN_DIR)/server
 TARGET2 := $(BIN_DIR)/client
 
-# Compiler and flags
 CC := gcc
 CFLAGS := -Wall -Wextra -O2
 
-# Default target
 all: $(TARGET1) $(TARGET2)
 
 # Link server and client object files into their respective executables
@@ -43,10 +39,11 @@ $(BIN_DIR)/%.o: $(SRC_DIR_CLIENT)/%.c | $(BIN_DIR)
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-# Clean build files
 clean:
 	rm -f $(BIN_DIR)/*.o $(TARGET1) $(TARGET2)
 
-# Run both server and client executables
-run:
-	./$(TARGET1) & ./$(TARGET2)
+server:
+	./$(TARGET1)
+
+client:
+	./$(TARGET2)

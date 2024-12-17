@@ -1,3 +1,5 @@
 .vscode/
 *.o
-bin/*
+bin/*.o
+bin/server
+bin/client
