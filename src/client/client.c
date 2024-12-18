@@ -22,7 +22,7 @@ int main(void)
         perror("Socket creation failed\n");
         exit(EXIT_FAILURE);
     }
-    
+
     // converts a human-readable IP string (e.g., "127.0.0.1")
     // into binary form and stores it in serv_addr.sin_addr
     if ( inet_pton(AF_INET, IP_ADDRESS, &serv_address.sin_addr ) <= 0 ) {
@@ -30,21 +30,43 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    if ( connect(client_fd, (struct sockaddr*)&serv_address, sizeof(serv_address)) ) {
+    if ( 
+        connect(client_fd, (struct sockaddr*)&serv_address, sizeof(serv_address))
+    ) {
         perror("Failed to connect\n");
         close(client_fd);
         exit(EXIT_FAILURE);
     }
-    // connecting to the server
 
-    char *hello = "Hello from client\n";
-    send(client_fd, hello, strlen(hello), 0);
-    printf("Message sent to server: %s\n", hello);
+    // communication
+    char buffer[BUFFER_SIZE];
+    while(1) {
+        printf("You: ");
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = '\0';
 
-    char buffer[BUFFER_SIZE] = { 0 };
-    int valread = read(client_fd, buffer, sizeof(buffer) - 1);
-    printf("message from server: %s\n", buffer);
+        send(client_fd, buffer, strlen(buffer), 0);
 
+        if (strcmp(buffer, "bye") == 0) {
+            printf("You ended the chat\n");
+            break;
+        }
+
+        memset(buffer, 0, sizeof(buffer));
+        int bytes_read = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+        if (bytes_read <= 0) {
+            printf("Server connection failed/was interrupted\n");
+            break;
+        }
+
+        printf("Server: %s\n", buffer);
+        if(strcmp(buffer, "bye") == 0) {
+            printf("Server ended the chat.\n");
+            break;
+        }
+
+
+    }
     close(client_fd);
     printf("Connection closed\n");
 
