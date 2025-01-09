@@ -21,19 +21,19 @@ int main(void)
 
     // creating the socket
     server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if ( server_fd  == -1 ) {
+    if (server_fd  == -1) {
         perror("Socket failed.");
         exit(EXIT_FAILURE);
     }
 
-    if ( bind(server_fd, (struct sockaddr*)&address, addrlen) == -1 ) {
+    if (bind(server_fd, (struct sockaddr*)&address, addrlen) == -1) {
         perror("bind failed");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
 
     // this is an iterative server
-    if ( listen(server_fd, 5) == -1 ) {
+    if (listen(server_fd, 5) == -1) {
         perror("Listen failed");
         close(server_fd);
         exit(EXIT_FAILURE);
@@ -43,7 +43,7 @@ int main(void)
 
     // accept collects data on who is the client(ip address and protocol)
     client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-    if ( client_fd == -1 ) {
+    if (client_fd == -1) {
         perror("Accept failed");
         close(server_fd);
         exit(EXIT_FAILURE);

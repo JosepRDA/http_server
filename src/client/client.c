@@ -18,14 +18,14 @@ int main(void)
     };
     
     client_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if ( client_fd < 0 ) {
+    if (client_fd < 0) {
         perror("Socket creation failed\n");
         exit(EXIT_FAILURE);
     }
 
     // converts a human-readable IP string (e.g., "127.0.0.1")
     // into binary form and stores it in serv_addr.sin_addr
-    if ( inet_pton(AF_INET, IP_ADDRESS, &serv_address.sin_addr ) <= 0 ) {
+    if (inet_pton(AF_INET, IP_ADDRESS, &serv_address.sin_addr ) <= 0) {
         perror("Invalid address / Address not supported\n");
         exit(EXIT_FAILURE);
     }
@@ -64,8 +64,6 @@ int main(void)
             printf("Server ended the chat.\n");
             break;
         }
-
-
     }
     close(client_fd);
     printf("Connection closed\n");
